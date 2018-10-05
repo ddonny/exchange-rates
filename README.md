@@ -21,6 +21,7 @@ docker run -it -d -p 8080:8080 -e "http.host=0.0.0.0" -e "transport.host=127.0.0
 ## Run test
 * You might need to run the app first
 ```bash
+npm install
 npm run start
 ```
 * after app running on port 3000 and ip 127.0.0.1, add new tab CLI and run:
