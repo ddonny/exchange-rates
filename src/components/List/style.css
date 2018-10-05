@@ -1,0 +1,81 @@
+.list-wrapper{
+  padding-top: 80px;
+}
+.list-wrapper .message{
+  text-align: center;
+  margin: 0.5rem 0.5rem;
+  font-size: 0.9rem;
+}
+.list-wrapper .list-group-item{
+  margin: .5rem 1.25rem 0 1.25rem;
+  padding: 0 0;
+}
+.list-wrapper .list-group-item.active {
+  z-index: 2;
+  color: #000000;
+  background-color: #FEFEFE;
+  border: 1px solid rgba(0,0,0,.125);
+}
+.list-group-item-heading.currency{
+  font-weight: 400;
+}
+.list-wrapper .conversion-wrapper{
+  display: flex;
+}
+.list-wrapper .conversion-wrapper .conversion-section-1{
+  flex: 1;
+}
+.list-wrapper .conversion-wrapper .conversion-section-1 .area-1{
+  flex: 1;
+  display: flex;
+  padding: 0.5rem 0.5rem;
+}
+.list-wrapper .conversion-section-1 .area-1 .currency{
+  flex: 0.86;
+}
+.list-wrapper .conversion-section-1 .area-1 .amount-conversion{
+  flex: 0.1;
+}
+.list-wrapper .conversion-section-1 .area-2{
+  padding: 0 0.5rem 0.5rem 0.5rem;
+  font-size: 0.8rem;
+  font-weight: bold;
+  font-style: italic;
+}
+.list-wrapper .conversion-section-1 .area-3{
+  padding: 0 0.5rem 0.5rem 0.5rem;
+  font-size: 0.8rem;
+  font-style: italic;
+}
+/* section 2 */
+.list-wrapper .conversion-wrapper .conversion-section-2{
+  flex: 0;
+}
+.list-wrapper .conversion-wrapper .conversion-section-2 button{
+  height: 100%;
+}
+
+/* button add */
+.list-wrapper .button-add-more-conversion,
+.list-wrapper .selections-add-more-conversion
+{
+  margin: .5rem 1.25rem 1.25rem 1.25rem;
+  padding: 0 0;
+  display: flex;
+}
+.list-wrapper .selections-add-more-conversion .dropdown{
+  flex: 1;
+  display: flex;
+}
+.list-wrapper .button-add-more-conversion button{
+  width: 100%;
+}
+.list-wrapper .selections-add-more-conversion .dropdown-toggle.btn{
+  color: #000000;
+  background-color: #F0F0F0;
+  border-color: #F0F0F0;
+  flex: 1;
+}
+.list-wrapper .selections-add-more-conversion .dropdown-toggle:focus{
+  box-shadow: 0 0 0 0.1rem rgba(108,117,125,.2) !important;
+}

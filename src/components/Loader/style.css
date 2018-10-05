@@ -1,0 +1,9 @@
+.loader{
+  text-align: center;
+  padding: 1em;
+  display: inline-block;
+  vertical-align: top;
+  background-image: url('./../../loader.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+}
