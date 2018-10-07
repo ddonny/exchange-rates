@@ -91,7 +91,7 @@ class List extends Component {
       }
     }
     this.setState({
-      listAvailableCurrencyToAdd: listAvailableCurrencyToAdd,
+      listAvailableCurrencyToAdd: listAvailableCurrencyToAdd.sort(),
       conversionListDataComplete: true
     });
   }
@@ -117,7 +117,7 @@ class List extends Component {
     const tempListAvailableCurrencyToAdd = listAvailableCurrencyToAdd;
     tempListAvailableCurrencyToAdd.push(currency);
     this.setState({
-      listAvailableCurrencyToAdd: tempListAvailableCurrencyToAdd
+      listAvailableCurrencyToAdd: tempListAvailableCurrencyToAdd.sort()
     }, () => {
       this.props.setConversionListAction(newArrayOfListCurrencyConversion);
     });
