@@ -57,7 +57,6 @@ class List extends Component {
       .then(res => res.json())
       .then(
         (result) => {
-          console.log('result', result)
           this.setState({
             resultConversion: result
           }, () => {
@@ -104,15 +103,24 @@ class List extends Component {
   }
   deleteFromConversionList = (currency) => {
     const { 
-      listCurrencyConversion 
+      listCurrencyConversion,
     } = this.props.globalReducer;
+    const {
+      listAvailableCurrencyToAdd
+    } = this.state;
     let newArrayOfListCurrencyConversion = listCurrencyConversion;
     for (let index in newArrayOfListCurrencyConversion) {
       if (newArrayOfListCurrencyConversion[index]['currency'] === currency) {
         newArrayOfListCurrencyConversion.splice(index, 1);
       }
     }
-    this.props.setConversionListAction(newArrayOfListCurrencyConversion);
+    const tempListAvailableCurrencyToAdd = listAvailableCurrencyToAdd;
+    tempListAvailableCurrencyToAdd.push(currency);
+    this.setState({
+      listAvailableCurrencyToAdd: tempListAvailableCurrencyToAdd
+    }, () => {
+      this.props.setConversionListAction(newArrayOfListCurrencyConversion);
+    });
   }
   commitAddNewConversionTarget = () => {
     const {
