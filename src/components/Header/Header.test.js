@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import App from 'App';
+import Header from 'components/Header';
 import Enzyme, { configure, shallow, mount, render } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 // import renderer from 'react-test-renderer';
 /* custom */
 import configureStore from 'redux-mock-store';
-import { setCurrenciesWordAction as originSetCurrenciesWordAction, setConversionListAction as originSetConversionListAction } from 'actions/globalActions';
+// import { setCurrenciesWordAction, setConversionListAction } from 'actions/globalActions';
 const middlewares = []
 const mockStore = configureStore(middlewares)
 const store = mockStore();
@@ -212,84 +213,38 @@ const PROPS = {
     currenciesWordListComplete: true // for app, skip get currencies word list
   }
 };
-describe('App test', function () {
+describe('Header test', function () {
   beforeEach(() => {
     store.clearActions();
     jest.setTimeout(10000);
+    jest.useFakeTimers();
   });
-  it('renders correctly', (done) => {
+  it('when setEdit set true value, field input opened', (done) => {
     const store = mockStore(PROPS)
-    const div = document.createElement('div');
-    ReactDOM.render(
-      <Provider store={store}>
-        <App/>
-      </Provider>
-    , div);
-    ReactDOM.unmountComponentAtNode(div);   
-    done();
-  });
-
-  it('calls componentDidMount', () => {
+    const context = { store };
+    const wrapper = shallow(
+        <Header/>,
+        { context },
+      );
+    const inst = wrapper.dive().instance();
+    inst.setEdit(true);
+    jest.runAllTimers();
+    wrapper.update(); // <--- force re-render of the component
+    expect(inst.state.editBaseAmount).toEqual(true);
+    done()
+  })
+  it('when onBlurInput method', (done) => {
     const store = mockStore(PROPS)
-    const spy = jest.spyOn(App.prototype, 'componentDidMount');
-    const wrapper = mount(<Provider store={store} >
-      <App/>
-    </Provider>);
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it('conversions list rendered', (done) => {
-    const setCurrenciesWordAction = () => ({
-      type: 'SET_CURRENCIES_WORD',
-      currenciesWordList: PROPS.globalReducer.currenciesWordList
-    })
-    const setConversionListAction = () => ({
-      type: 'SET_CONVERSION_LIST',
-      listCurrencyConversion: PROPS.globalReducer.listCurrencyConversion
-    })
-    const store = mockStore(PROPS)
-
-    store.dispatch(setCurrenciesWordAction(PROPS.globalReducer.currenciesWordList))
-    store.dispatch(setConversionListAction(PROPS.globalReducer.listCurrencyConversion))
-    const app = mount(<Provider store={store} >
-      <App {...PROPS}/>
-    </Provider>);
-    // console.log(app.debug());
-    expect(app.find('.list-group').length).toEqual(1)
-    // const tree = renderer.create(<Provider store={store}>
-    //   <App />
-    // </Provider>).toJSON();
-    // expect(tree).toMatchSnapshot();
-    done();
-  });
-
-  it('dispatch correct origin setCurrenciesWordAction', (done) => {
-    const expectedSetCurrenciesWordAction = [
-      {
-        'type': 'SET_CURRENCIES_WORD',
-        'currenciesWordList': PROPS.globalReducer.currenciesWordList
-      }
-    ];
-    
-    const store = mockStore(PROPS)
-
-    store.dispatch(originSetCurrenciesWordAction(PROPS.globalReducer.currenciesWordList))
-    expect(store.getActions()).toEqual(expectedSetCurrenciesWordAction);
-    done();
-  }); 
-
-  it('dispatch correct origin setCurrenciesWordAction', (done) => {
-    const expectedSetConversionListAction = [
-      {
-        'type': 'SET_CONVERSION_LIST',
-        'listCurrencyConversion': PROPS.globalReducer.listCurrencyConversion
-      }
-    ];
-    
-    const store = mockStore(PROPS)
-
-    store.dispatch(originSetConversionListAction(PROPS.globalReducer.listCurrencyConversion))
-    expect(store.getActions()).toEqual(expectedSetConversionListAction);
-    done();
-  }); 
+    const context = { store };
+    const wrapper = shallow(
+        <Header/>,
+        { context },
+      );
+    const inst = wrapper.dive().instance();
+    inst.onBlurInput();
+    jest.runAllTimers();
+    wrapper.update(); // <--- force re-render of the component
+    expect(inst.state.editBaseAmount).toEqual(false);
+    done()
+  })
 })

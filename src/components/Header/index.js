@@ -24,6 +24,9 @@ class Header extends Component {
     }
     this.inputElem = React.createRef()
   }
+  componentWillMount() {
+    this._refs = {};
+  }
   onValueChangeBaseAmount = (values) => {
     // value => raw value from input
     // formattedValue => contain formatted value from input
@@ -41,8 +44,8 @@ class Header extends Component {
   setEdit = (value) => {
     this.setState({editBaseAmount: value}, () => {
       setTimeout(() => {
-        if (value) {
-          this.inputElem.focus();
+        if (value && this._refs[`inputElem`]) {
+          this._refs[`inputElem`].focus();
           // alternative to set focus
           // document.getElementById('base-amount-field-input').focus();
         }
@@ -57,7 +60,6 @@ class Header extends Component {
     let formatTo4Precision = accounting.formatNumber(unformattedBaseAmount, 4, ',', '.');
     this.setState({baseAmount: formatTo4Precision});
     this.setEdit(false);
-    // formatting
   }
   render() {
     const {
@@ -77,7 +79,7 @@ class Header extends Component {
             (editBaseAmount) ?
               <div className="input-base-amount">
                 <FontAwesomeIcon onClick={() => { this.setEdit(false) }} icon="times-circle" className="icon-close" />
-                <CurrencyFormat ref = {(inst) => this.inputElem = ReactDOM.findDOMNode(inst)} id="base-amount-field-input" customInput={Input} value={baseAmount} thousandSeparator={','} decimalSeparator={'.'} prefix={''} onValueChange={this.onValueChangeBaseAmount} onBlur={this.onBlurInput}/>
+                <CurrencyFormat ref = {(inst) => this._refs[`inputElem`] = ReactDOM.findDOMNode(inst)} id="base-amount-field-input" customInput={Input} value={baseAmount} thousandSeparator={','} decimalSeparator={'.'} prefix={''} onValueChange={this.onValueChangeBaseAmount} onBlur={this.onBlurInput}/>
               </div>
             :
               <div>
@@ -93,9 +95,7 @@ class Header extends Component {
 const mapStateToProps = state => ({
   ...state
 })
-const mapDispatchToProps = dispatch => ({
-})
 Header.propTypes = {
   callbackFunctionSendBaseAmountToParent: PropTypes.func
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(mapStateToProps)(Header);

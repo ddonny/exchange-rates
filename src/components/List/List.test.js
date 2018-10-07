@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import App from 'App';
+import List, { mapStateToProps, mapDispatchToProps } from 'components/List';
 import Enzyme, { configure, shallow, mount, render } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 // import renderer from 'react-test-renderer';
 /* custom */
 import configureStore from 'redux-mock-store';
-import { setCurrenciesWordAction as originSetCurrenciesWordAction, setConversionListAction as originSetConversionListAction } from 'actions/globalActions';
+// import { setCurrenciesWordAction, setConversionListAction } from 'actions/globalActions';
 const middlewares = []
 const mockStore = configureStore(middlewares)
 const store = mockStore();
@@ -212,84 +213,38 @@ const PROPS = {
     currenciesWordListComplete: true // for app, skip get currencies word list
   }
 };
-describe('App test', function () {
+describe('List test', function () {
   beforeEach(() => {
     store.clearActions();
     jest.setTimeout(10000);
+    jest.useFakeTimers();
   });
-  it('renders correctly', (done) => {
+  it('should state.conversionListDataComplete changed', (done) => {
     const store = mockStore(PROPS)
-    const div = document.createElement('div');
-    ReactDOM.render(
-      <Provider store={store}>
-        <App/>
-      </Provider>
-    , div);
-    ReactDOM.unmountComponentAtNode(div);   
-    done();
-  });
-
-  it('calls componentDidMount', () => {
+    const context = { store };
+    let result = {"base":"USD","date":"2018-10-05","rates":{"RON":4.0594472449,"ISK":113.9405527551,"RUB":66.6353207022,"BRL":3.8428645924,"TRY":6.1674778376,"DKK":6.4826177646,"JPY":113.8797149313,"EUR":0.8691117678,"HUF":282.1049887015,"SGD":1.381018599,"PHP":54.2803754563,"CNY":6.8688510342,"NOK":8.2681209804,"SEK":9.0768294803,"MXN":19.0161654789,"GBP":0.7662523901,"IDR":15180.0017382235,"HRK":6.4509820963,"KRW":1128.3156613941,"ZAR":14.7535199027,"BGN":1.6998087954,"CZK":22.372675126,"MYR":4.1500086911,"INR":73.7732487398,"CAD":1.2916739093,"THB":32.8046236746,"HKD":7.8339127412,"NZD":1.5456283678,"PLN":3.7410916044,"ILS":3.6313227881,"AUD":1.4140448462,"USD":1,"CHF":0.9936554841}};
+    const wrapper = shallow(
+        <List/>,
+        { context },
+      );
+    const inst = wrapper.dive().instance();
+    inst.setState({resultConversion: result});
+    inst.buildAvailableTargetCurrencyForAddToList();
+    jest.runAllTimers();
+    wrapper.update(); // <--- force re-render of the component
+    expect(inst.state.resultConversion).toEqual(result);
+    expect(inst.state.conversionListDataComplete).toEqual(true);
+    done()
+  })
+  it('check dispatch setConversionListAction', (done) => {
     const store = mockStore(PROPS)
-    const spy = jest.spyOn(App.prototype, 'componentDidMount');
-    const wrapper = mount(<Provider store={store} >
-      <App/>
-    </Provider>);
-    expect(spy).toHaveBeenCalled();
-  });
-
-  it('conversions list rendered', (done) => {
-    const setCurrenciesWordAction = () => ({
-      type: 'SET_CURRENCIES_WORD',
-      currenciesWordList: PROPS.globalReducer.currenciesWordList
-    })
-    const setConversionListAction = () => ({
-      type: 'SET_CONVERSION_LIST',
-      listCurrencyConversion: PROPS.globalReducer.listCurrencyConversion
-    })
-    const store = mockStore(PROPS)
-
-    store.dispatch(setCurrenciesWordAction(PROPS.globalReducer.currenciesWordList))
-    store.dispatch(setConversionListAction(PROPS.globalReducer.listCurrencyConversion))
-    const app = mount(<Provider store={store} >
-      <App {...PROPS}/>
-    </Provider>);
-    // console.log(app.debug());
-    expect(app.find('.list-group').length).toEqual(1)
-    // const tree = renderer.create(<Provider store={store}>
-    //   <App />
-    // </Provider>).toJSON();
-    // expect(tree).toMatchSnapshot();
-    done();
-  });
-
-  it('dispatch correct origin setCurrenciesWordAction', (done) => {
-    const expectedSetCurrenciesWordAction = [
-      {
-        'type': 'SET_CURRENCIES_WORD',
-        'currenciesWordList': PROPS.globalReducer.currenciesWordList
-      }
-    ];
-    
-    const store = mockStore(PROPS)
-
-    store.dispatch(originSetCurrenciesWordAction(PROPS.globalReducer.currenciesWordList))
-    expect(store.getActions()).toEqual(expectedSetCurrenciesWordAction);
-    done();
-  }); 
-
-  it('dispatch correct origin setCurrenciesWordAction', (done) => {
-    const expectedSetConversionListAction = [
-      {
-        'type': 'SET_CONVERSION_LIST',
-        'listCurrencyConversion': PROPS.globalReducer.listCurrencyConversion
-      }
-    ];
-    
-    const store = mockStore(PROPS)
-
-    store.dispatch(originSetConversionListAction(PROPS.globalReducer.listCurrencyConversion))
-    expect(store.getActions()).toEqual(expectedSetConversionListAction);
-    done();
-  }); 
+    const context = { store };
+    const wrapper = shallow(
+      <List/>,
+      { context },
+    );
+    const inst = wrapper.dive().instance();
+    expect(inst.props.setConversionListAction()).toEqual({ type: 'SET_CONVERSION_LIST' });
+    done()
+  })
 })

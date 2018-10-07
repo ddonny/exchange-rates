@@ -57,6 +57,7 @@ class List extends Component {
       .then(res => res.json())
       .then(
         (result) => {
+          console.log('result', result)
           this.setState({
             resultConversion: result
           }, () => {
@@ -93,10 +94,10 @@ class List extends Component {
     this.setState({
       listAvailableCurrencyToAdd: listAvailableCurrencyToAdd,
       conversionListDataComplete: true
-    })
+    });
   }
   showSelectionForAddMoreCurrencies = () => {
-    this.setState({showSelectionForAddMoreCurrencies: true})
+    this.setState({showSelectionForAddMoreCurrencies: true});
   }
   addNewCurrency = (currency) => {
     this.setState({addNewCurrency: currency})
