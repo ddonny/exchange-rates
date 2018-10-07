@@ -12,13 +12,17 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showLoading: true,
+      showLoading: (props.shouldRequest) ? props.shouldRequest : true,
       baseAmountValue: props.globalReducer.baseAmount
     }
   }
   componentDidMount() {
-    // derived currencies word data from openexchangerates since not available on exchangeratesapi.io
-    fetch("https://openexchangerates.org/api/currencies.json")
+    const {
+      currenciesWordListComplete
+    } = this.props.globalReducer;
+    if (!currenciesWordListComplete) {
+      // derived currencies word data from openexchangerates since not available on exchangeratesapi.io
+      fetch("https://openexchangerates.org/api/currencies.json")
       .then(res => res.json())
       .then(
         (result) => {
@@ -33,6 +37,11 @@ class App extends Component {
           });
         }
       )
+    } else {
+      this.setState({
+        showLoading: false
+      })
+    }
   }
   callbackFunctionSendBaseAmountToParent = (baseAmountValue) => {
     // callback function for get value base amount after changed.
