@@ -119,16 +119,19 @@ class List extends Component {
       addNewCurrency,
       listCurrencyConversion
     } = this.state;
-    // add new currency target to list
-    let newCurrencyTarget = {
-      currency: addNewCurrency 
-    };
-    listCurrencyConversion.push(newCurrencyTarget);
-    this.setState({
-      listCurrencyConversion: listCurrencyConversion
-    }, () => {
-      this.buildAvailableTargetCurrencyForAddToList();
-    })
+    if (addNewCurrency) {
+      // add new currency target to list
+      let newCurrencyTarget = {
+        currency: addNewCurrency 
+      };
+      listCurrencyConversion.push(newCurrencyTarget);
+      this.setState({
+        listCurrencyConversion: listCurrencyConversion,
+        addNewCurrency: false
+      }, () => {
+        this.buildAvailableTargetCurrencyForAddToList();
+      })
+    }
   }
   returnAddNewCurrenciesElement = () => {
     const {
