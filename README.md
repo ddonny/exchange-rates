@@ -3,7 +3,7 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-  ![screenshot](https://raw.githubusercontent.com/ddonny/exchange-rates/master/screenshot/screenshot.PNG)
+  ![screenshot](https://github.com/ddonny/exchange-rates/blob/master/screenshot/screenshot.PNG?raw=true)
 
 ## Deploy
 
